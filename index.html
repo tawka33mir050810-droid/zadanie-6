@@ -2,37 +2,87 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Простой слайдер</title>
     <style>
-        .slider-container {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
         }
         
-        .slider-track {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .slides {
             display: flex;
-            transition: transform 0.5s ease-in-out;
+            width: 500%; /* 5 слайдов по 100% */
+            height: 100%;
+            transition: transform 0.5s ease;
         }
         
         .slide {
-            min-width: 100%;
-            height: 400px;
+            width: 20%; /* 100% / 5 слайдов */
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
             color: white;
+            font-weight: bold;
         }
         
-        .slide-1 { background: linear-gradient(45deg, #ff6b6b, #ffa8a8); }
-        .slide-2 { background: linear-gradient(45deg, #4ecdc4, #a7ffeb); }
-        .slide-3 { background: linear-gradient(45deg, #ffe66d, #ffd166); }
-        .slide-4 { background: linear-gradient(45deg, #1a535c, #4ecdc4); }
+        /* Цаета для слайдов */
+        .slide:nth-child(1) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .slide:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .slide:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .slide:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .slide:nth-child(5) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
         
-        .slider-nav {
+        /* Кнопки */
+        .btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.3);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .prev { left: 20px; }
+        .next { right: 20px; }
+        
+        /* Точки */
+        .dots {
             position: absolute;
             bottom: 20px;
             left: 50%;
@@ -41,188 +91,151 @@
             gap: 10px;
         }
         
-        .slider-dot {
+        .dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255,255,255,0.5);
             border: none;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: 0.3s;
         }
         
-        .slider-dot.active {
+        .dot.active {
             background: white;
+            transform: scale(1.2);
         }
         
-        .slider-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.3);
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
+        /* Инструкция */
+        .instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
         
-        .slider-btn:hover {
-            background: rgba(255, 255, 255, 0.5);
+        .instructions h2 {
+            margin-bottom: 10px;
+            color: #333;
         }
         
-        .prev-btn {
-            left: 20px;
+        .instructions ul {
+            margin-left: 20px;
+            color: #666;
         }
         
-        .next-btn {
-            right: 20px;
+        .instructions li {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
-    <div class="slider-container">
-        <div class="slider-track">
-            <div class="slide slide-1">Слайд 1</div>
-            <div class="slide slide-2">Слайд 2</div>
-            <div class="slide slide-3">Слайд 3</div>
-            <div class="slide slide-4">Слайд 4</div>
+    <div class="container">
+        <h1>🚀 Простой рабочий слайдер</h1>
+        
+        <!-- Сам слайдер -->
+        <div class="slider" id="slider">
+            <div class="slides" id="slides">
+                <div class="slide">1</div>
+                <div class="slide">2</div>
+                <div class="slide">3</div>
+                <div class="slide">4</div>
+                <div class="slide">5</div>
+            </div>
+            
+            <button class="btn prev" onclick="prevSlide()">‹</button>
+            <button class="btn next" onclick="nextSlide()">›</button>
+            
+            <div class="dots" id="dots">
+                <!-- Точки добавляются автоматически -->
+            </div>
         </div>
         
-        <button class="slider-btn prev-btn">‹</button>
-        <button class="slider-btn next-btn">›</button>
-        
-        <div class="slider-nav">
-            <button class="slider-dot active" data-slide="0"></button>
-            <button class="slider-dot" data-slide="1"></button>
-            <button class="slider-dot" data-slide="2"></button>
-            <button class="slider-dot" data-slide="3"></button>
+        <div class="instructions">
+            <h2>✅ Как использовать:</h2>
+            <ul>
+                <li><strong>Стрелки влево/вправо</strong> - переключение слайдов</li>
+                <li><strong>Клики по точкам</strong> - переход к конкретному слайду</li>
+                <li><strong>Автоплей</strong> - автоматическое переключение каждые 3 секунды</li>
+                <li><strong>Пауза</strong> - при наведении мыши на слайдер</li>
+            </ul>
         </div>
     </div>
 
     <script>
-        class Slider {
-            constructor(container) {
-                this.container = container;
-                this.track = container.querySelector('.slider-track');
-                this.slides = container.querySelectorAll('.slide');
-                this.prevBtn = container.querySelector('.prev-btn');
-                this.nextBtn = container.querySelector('.next-btn');
-                this.dots = container.querySelectorAll('.slider-dot');
-                this.currentSlide = 0;
-                this.slideCount = this.slides.length;
-                this.autoPlayInterval = null;
-                this.autoPlayDelay = 5000; // 5 секунд
-                
-                this.init();
-            }
-            
-            init() {
-                this.prevBtn.addEventListener('click', () => this.prev());
-                this.nextBtn.addEventListener('click', () => this.next());
-                
-                this.dots.forEach(dot => {
-                    dot.addEventListener('click', (e) => {
-                        const slideIndex = parseInt(e.target.dataset.slide);
-                        this.goToSlide(slideIndex);
-                    });
-                });
-                
-                this.startAutoPlay();
-                
-                // Пауза при наведении
-                this.container.addEventListener('mouseenter', () => {
-                    this.stopAutoPlay();
-                });
-                
-                this.container.addEventListener('mouseleave', () => {
-                    this.startAutoPlay();
-                });
-                
-                // Свайп для мобильных устройств
-                this.setupTouchEvents();
-            }
-            
-            updateSlider() {
-                const translateX = -this.currentSlide * 100;
-                this.track.style.transform = `translateX(${translateX}%)`;
-                
-                // Обновляем точки
-                this.dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === this.currentSlide);
-                });
-            }
-            
-            next() {
-                this.currentSlide = (this.currentSlide + 1) % this.slideCount;
-                this.updateSlider();
-                this.resetAutoPlay();
-            }
-            
-            prev() {
-                this.currentSlide = (this.currentSlide - 1 + this.slideCount) % this.slideCount;
-                this.updateSlider();
-                this.resetAutoPlay();
-            }
-            
-            goToSlide(index) {
-                this.currentSlide = index;
-                this.updateSlider();
-                this.resetAutoPlay();
-            }
-            
-            startAutoPlay() {
-                this.stopAutoPlay();
-                this.autoPlayInterval = setInterval(() => this.next(), this.autoPlayDelay);
-            }
-            
-            stopAutoPlay() {
-                if (this.autoPlayInterval) {
-                    clearInterval(this.autoPlayInterval);
-                    this.autoPlayInterval = null;
-                }
-            }
-            
-            resetAutoPlay() {
-                this.stopAutoPlay();
-                this.startAutoPlay();
-            }
-            
-            setupTouchEvents() {
-                let startX = 0;
-                let endX = 0;
-                
-                this.track.addEventListener('touchstart', (e) => {
-                    startX = e.touches[0].clientX;
-                });
-                
-                this.track.addEventListener('touchmove', (e) => {
-                    endX = e.touches[0].clientX;
-                });
-                
-                this.track.addEventListener('touchend', () => {
-                    const diff = startX - endX;
-                    const threshold = 50;
-                    
-                    if (Math.abs(diff) > threshold) {
-                        if (diff > 0) {
-                            this.next();
-                        } else {
-                            this.prev();
-                        }
-                    }
-                });
-            }
+        // Переменные
+        let currentSlide = 0;
+        let totalSlides = 5;
+        let autoPlayInterval;
+        const slides = document.getElementById('slides');
+        const dotsContainer = document.getElementById('dots');
+        
+        // Создаем точки
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
         }
         
-        // Инициализация слайдера
-        document.addEventListener('DOMContentLoaded', () => {
-            const sliderContainer = document.querySelector('.slider-container');
-            new Slider(sliderContainer);
+        const dots = document.querySelectorAll('.dot');
+        
+        // Функции слайдера
+        function updateSlider() {
+            // Перемещаем слайды
+            slides.style.transform = `translateX(-${currentSlide * 20}%)`;
+            
+            // Обновляем точки
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+            resetAutoPlay();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+            resetAutoPlay();
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+            resetAutoPlay();
+        }
+        
+        // Автоплей
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(nextSlide, 3000);
+        }
+        
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+        
+        function resetAutoPlay() {
+            stopAutoPlay();
+            startAutoPlay();
+        }
+        
+        // Управление с клавиатуры
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
         });
+        
+        // Пауза при наведении
+        document.getElementById('slider').addEventListener('mouseenter', stopAutoPlay);
+        document.getElementById('slider').addEventListener('mouseleave', startAutoPlay);
+        
+        // Запуск
+        startAutoPlay();
     </script>
 </body>
 </html>
