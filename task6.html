@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 6 - Слайдер изображений</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        /* Шапка */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Основной контент */
+        .content {
+            display: flex;
+            gap: 30px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        /* Левая часть - слайдер */
+        .slider-container {
+            flex: 2;
+        }
+        
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .slides {
+            display: flex;
+            width: 500%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .slide {
+            width: 20%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        /* Цвета слайдов */
+        .slide:nth-child(1) { 
+            background: linear-gradient(45deg, #FF6B6B, #FFA8A8);
+        }
+        .slide:nth-child(2) { 
+            background: linear-gradient(45deg, #4ECDC4, #A7FFEB);
+        }
+        .slide:nth-child(3) { 
+            background: linear-gradient(45deg, #FFD166, #FFE66D);
+        }
+        .slide:nth-child(4) { 
+            background: linear-gradient(45deg, #1A535C, #4ECDC4);
+        }
+        .slide:nth-child(5) { 
+            background: linear-gradient(45deg, #6A11CB, #2575FC);
+        }
+        
+        /* Кнопки навигации */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .prev-btn {
+            left: 20px;
+        }
+        
+        .next-btn {
+            right: 20px;
+        }
+        
+        /* Индикаторы */
+        .indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .indicator.active {
+            background: #4ECDC4;
+            transform: scale(1.2);
+        }
+        
+        .indicator:hover {
+            background: #FF6B6B;
+        }
+        
+        /* Правая часть - информация */
+        .info-panel {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        
+        .info-panel h2 {
+            color: #1A535C;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4ECDC4;
+        }
+        
+        .features {
+            list-style-type: none;
+        }
+        
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+        }
+        
+        .features li:before {
+            content: "✓";
+            color: #4ECDC4;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .control-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #4ECDC4;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .control-btn:hover {
+            background: #1A535C;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Счетчик */
+        .counter {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Футер */
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .slider {
+                height: 300px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <header class="header">
+            <h1>Задание 6: Интерактивный слайдер</h1>
+            <p>Создание слайдера изображений с навигацией и управлением</p>
+        </header>
+        
+        <!-- Основной контент -->
+        <main class="content">
+            <!-- Левая часть - слайдер -->
+            <div class="slider-container">
+                <div class="slider" id="slider">
+                    <div class="slides" id="slides">
+                        <div class="slide">Слайд 1</div>
+                        <div class="slide">Слайд 2</div>
+                        <div class="slide">Слайд 3</div>
+                        <div class="slide">Слайд 4</div>
+                        <div class="slide">Слайд 5</div>
+                    </div>
+                    
+                    <!-- Кнопки навигации -->
+                    <button class="nav-btn prev-btn" id="prevBtn">‹</button>
+                    <button class="nav-btn next-btn" id="nextBtn">›</button>
+                </div>
+                
+                <!-- Индикаторы -->
+                <div class="indicators" id="indicators">
+                    <!-- Индикаторы добавляются через JS -->
+                </div>
+                
+                <!-- Счетчик слайдов -->
+                <div class="counter" id="counter">
+                    Слайд <span id="currentSlide">1</span> из <span id="totalSlides">5</span>
+                </div>
+            </div>
+            
+            <!-- Правая часть - информация и управление -->
+            <div class="info-panel">
+                <h2>Управление слайдером</h2>
+                
+                <ul class="features">
+                    <li>Автоматическое переключение</li>
+                    <li>Ручная навигация стрелками</li>
+                    <li>Переход по индикаторам</li>
+                    <li>Пауза при наведении</li>
+                    <li>Адаптивный дизайн</li>
+                    <li>Плавные анимации</li>
+                </ul>
+                
+                <div class="controls">
+                    <button class="control-btn" id="playBtn">▶ Включить автоплей</button>
+                    <button class="control-btn" id="pauseBtn">⏸ Остановить автоплей</button>
+                    <button class="control-btn" id="prevSlideBtn">← Предыдущий слайд</button>
+                    <button class="control-btn" id="nextSlideBtn">→ Следующий слайд</button>
+                    <button class="control-btn" id="resetBtn">↻ Сбросить на первый слайд</button>
+                </div>
+                
+                <div class="counter">
+                    <p><strong>Интервал автоплея:</strong> <span id="intervalValue">3</span> секунды</p>
+                    <input type="range" id="intervalSlider" min="1" max="10" value="3" style="width: 100%; margin-top: 5px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 5px;">
+                        <span>1с</span><span>5с</span><span>10с</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Футер -->
+        <footer class="footer">
+            <p>© 2025 Задание по веб-разработке. Слайдер на чистом JavaScript.</p>
+            <a href="index.html" class="back-link">← Вернуться к списку заданий</a>
+        </footer>
+    </div>
+
+    <script>
+        // Конфигурация
+        let currentSlide = 0;
+        let totalSlides = 5;
+        let autoPlayInterval;
+        let autoPlayEnabled = true;
+        let autoPlayIntervalTime = 3000; // 3 секунды
+        
+        // Элементы DOM
+        const slides = document.getElementById('slides');
+        const indicatorsContainer = document.getElementById('indicators');
+        const currentSlideSpan = document.getElementById('currentSlide');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+        const intervalValue = document.getElementById('intervalValue');
+        const intervalSlider = document.getElementById('intervalSlider');
+        
+        // Инициализация
+        function init() {
+            createIndicators();
+            updateSlider();
+            updateCounter();
+            startAutoPlay();
+            setupEventListeners();
+        }
+        
+        // Создание индикаторов
+        function createIndicators() {
+            for (let i = 0; i < totalSlides; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = 'indicator' + (i === 0 ? ' active' : '');
+                indicator.dataset.index = i;
+                indicator.addEventListener('click', () => goToSlide(i));
+                indicatorsContainer.appendChild(indicator);
+            }
+        }
+        
+        // Обновление слайдера
+        function updateSlider() {
+            // Перемещение слайдов
+            slides.style.transform = `translateX(-${currentSlide * 20}%)`;
+            
+            // Обновление индикаторов
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlide);
+            });
+            
+            updateCounter();
+        }
+        
+        // Обновление счетчика
+        function updateCounter() {
+            currentSlideSpan.textContent = currentSlide + 1;
+            totalSlidesSpan.textContent = totalSlides;
+        }
+        
+        // Навигация
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+            if (autoPlayEnabled) resetAutoPlay();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+            if (autoPlayEnabled) resetAutoPlay();
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+            if (autoPlayEnabled) resetAutoPlay();
+        }
+        
+        // Автоплей
+        function startAutoPlay() {
+            if (autoPlayEnabled) {
+                stopAutoPlay();
+                autoPlayInterval = setInterval(nextSlide, autoPlayIntervalTime);
+            }
+        }
+        
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+        
+        function resetAutoPlay() {
+            stopAutoPlay();
+            if (autoPlayEnabled) {
+                startAutoPlay();
+            }
+        }
+        
+        function toggleAutoPlay() {
+            autoPlayEnabled = !autoPlayEnabled;
+            if (autoPlayEnabled) {
+                startAutoPlay();
+                document.getElementById('playBtn').textContent = '▶ Включить автоплей';
+            } else {
+                stopAutoPlay();
+                document.getElementById('playBtn').textContent = '▶ Продолжить автоплей';
+            }
+        }
+        
+        // Обработчики событий
+        function setupEventListeners() {
+            // Кнопки навигации
+            document.getElementById('prevBtn').addEventListener('click', prevSlide);
+            document.getElementById('nextBtn').addEventListener('click', nextSlide);
+            
+            // Кнопки управления
+            document.getElementById('playBtn').addEventListener('click', () => {
+                autoPlayEnabled = true;
+                startAutoPlay();
+            });
+            
+            document.getElementById('pauseBtn').addEventListener('click', () => {
+                autoPlayEnabled = false;
+                stopAutoPlay();
+            });
+            
+            document.getElementById('prevSlideBtn').addEventListener('click', prevSlide);
+            document.getElementById('nextSlideBtn').addEventListener('click', nextSlide);
+            document.getElementById('resetBtn').addEventListener('click', () => goToSlide(0));
+            
+            // Слайдер интервала
+            intervalSlider.addEventListener('input', function() {
+                autoPlayIntervalTime = this.value * 1000;
+                intervalValue.textContent = this.value;
+                if (autoPlayEnabled) resetAutoPlay();
+            });
+            
+            // Пауза при наведении
+            document.getElementById('slider').addEventListener('mouseenter', stopAutoPlay);
+            document.getElementById('slider').addEventListener('mouseleave', () => {
+                if (autoPlayEnabled) startAutoPlay();
+            });
+            
+            // Управление с клавиатуры
+            document.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        prevSlide();
+                        break;
+                    case 'ArrowRight':
+                        nextSlide();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        toggleAutoPlay();
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        goToSlide(0);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        goToSlide(totalSlides - 1);
+                        break;
+                }
+            });
+        }
+        
+        // Запуск при загрузке страницы
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

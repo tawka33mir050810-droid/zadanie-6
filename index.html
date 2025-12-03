@@ -2,240 +2,66 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Простой слайдер</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задания по веб-разработке</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        
-        .container {
             max-width: 800px;
             margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-        
         h1 {
-            text-align: center;
-            margin-bottom: 20px;
             color: #333;
+            text-align: center;
+            margin-bottom: 30px;
         }
-        
-        .slider {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        
-        .slides {
-            display: flex;
-            width: 500%; /* 5 слайдов по 100% */
-            height: 100%;
-            transition: transform 0.5s ease;
-        }
-        
-        .slide {
-            width: 20%; /* 100% / 5 слайдов */
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            color: white;
-            font-weight: bold;
-        }
-        
-        /* Цаета для слайдов */
-        .slide:nth-child(1) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .slide:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .slide:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        .slide:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-        .slide:nth-child(5) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
-        
-        /* Кнопки */
-        .btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.3);
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            transition: 0.3s;
-            z-index: 10;
-        }
-        
-        .btn:hover {
-            background: rgba(255,255,255,0.5);
-        }
-        
-        .prev { left: 20px; }
-        .next { right: 20px; }
-        
-        /* Точки */
-        .dots {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-        }
-        
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        
-        .dot.active {
-            background: white;
-            transform: scale(1.2);
-        }
-        
-        /* Инструкция */
-        .instructions {
+        .task-list {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            margin-top: 30px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
-        .instructions h2 {
-            margin-bottom: 10px;
-            color: #333;
+        ul {
+            list-style-type: none;
+            padding: 0;
         }
-        
-        .instructions ul {
-            margin-left: 20px;
-            color: #666;
+        li {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background 0.3s;
         }
-        
-        .instructions li {
-            margin: 5px 0;
+        li:hover {
+            background: #e9ecef;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+        }
+        a:hover {
+            color: #0056b3;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 Простой рабочий слайдер</h1>
-        
-        <!-- Сам слайдер -->
-        <div class="slider" id="slider">
-            <div class="slides" id="slides">
-                <div class="slide">1</div>
-                <div class="slide">2</div>
-                <div class="slide">3</div>
-                <div class="slide">4</div>
-                <div class="slide">5</div>
-            </div>
-            
-            <button class="btn prev" onclick="prevSlide()">‹</button>
-            <button class="btn next" onclick="nextSlide()">›</button>
-            
-            <div class="dots" id="dots">
-                <!-- Точки добавляются автоматически -->
-            </div>
-        </div>
-        
-        <div class="instructions">
-            <h2>✅ Как использовать:</h2>
-            <ul>
-                <li><strong>Стрелки влево/вправо</strong> - переключение слайдов</li>
-                <li><strong>Клики по точкам</strong> - переход к конкретному слайду</li>
-                <li><strong>Автоплей</strong> - автоматическое переключение каждые 3 секунды</li>
-                <li><strong>Пауза</strong> - при наведении мыши на слайдер</li>
-            </ul>
-        </div>
+    <h1>Задания по веб-разработке</h1>
+    <div class="task-list">
+        <ul>
+            <li><a href="task1.html">Задание 1</a></li>
+            <li><a href="task2.html">Задание 2</a></li>
+            <li><a href="task3.html">Задание 3</a></li>
+            <li><a href="task4.html">Задание 4</a></li>
+            <li><a href="task5.html">Задание 5</a></li>
+            <li><a href="task6.html">Задание 6</a></li> <!-- Вот ваша ссылка -->
+            <li><a href="task7.html">Задание 7</a></li>
+        </ul>
     </div>
-
-    <script>
-        // Переменные
-        let currentSlide = 0;
-        let totalSlides = 5;
-        let autoPlayInterval;
-        const slides = document.getElementById('slides');
-        const dotsContainer = document.getElementById('dots');
-        
-        // Создаем точки
-        for (let i = 0; i < totalSlides; i++) {
-            const dot = document.createElement('button');
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.onclick = () => goToSlide(i);
-            dotsContainer.appendChild(dot);
-        }
-        
-        const dots = document.querySelectorAll('.dot');
-        
-        // Функции слайдера
-        function updateSlider() {
-            // Перемещаем слайды
-            slides.style.transform = `translateX(-${currentSlide * 20}%)`;
-            
-            // Обновляем точки
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-        
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateSlider();
-            resetAutoPlay();
-        }
-        
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateSlider();
-            resetAutoPlay();
-        }
-        
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlider();
-            resetAutoPlay();
-        }
-        
-        // Автоплей
-        function startAutoPlay() {
-            autoPlayInterval = setInterval(nextSlide, 3000);
-        }
-        
-        function stopAutoPlay() {
-            clearInterval(autoPlayInterval);
-        }
-        
-        function resetAutoPlay() {
-            stopAutoPlay();
-            startAutoPlay();
-        }
-        
-        // Управление с клавиатуры
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') prevSlide();
-            if (e.key === 'ArrowRight') nextSlide();
-        });
-        
-        // Пауза при наведении
-        document.getElementById('slider').addEventListener('mouseenter', stopAutoPlay);
-        document.getElementById('slider').addEventListener('mouseleave', startAutoPlay);
-        
-        // Запуск
-        startAutoPlay();
-    </script>
 </body>
 </html>
